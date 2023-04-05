@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,10 +38,14 @@ public class LoginController
 	@Autowired
 	private SecurityBusinessService security;
 	
+	Logger logger = LoggerFactory.getLogger(SecurityBusinessService.class);
 	@GetMapping("/")
 	public String display(Model model) {
+		logger.info("Entering LoginController.display()");
 		model.addAttribute("title", "Login Form");
 		model.addAttribute("loginModel", new LoginModel());
+		
+		logger.info("Exiting LoginController.display()");
 		return "login";
 	}
 	
@@ -48,6 +54,7 @@ public class LoginController
 	@PostMapping("/doLogin")
 	public String doLogin(@Valid LoginModel loginModel, BindingResult bindingResult, Model model)
 	{
+		logger.info("Entering LoginController.doLogin()");
 		//Check for validation errors
 		if(bindingResult.hasErrors()) 
 		{
@@ -66,6 +73,8 @@ public class LoginController
 		model.addAttribute("orders", service.getOrders());
 		//Print the form values out
 		//System.out.println(String.format("Form with Username of %s and Password of %s", loginModel.getUsername(), loginModel.getPassword()));
+		
+		logger.info("Exiting LoginController.doLogin()");
 		
 		//Navigate back to the Login View
 		return "orders";

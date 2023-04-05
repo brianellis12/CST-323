@@ -9,11 +9,15 @@ import com.gcu.data.OrderDataService;
 import com.gcu.data.entity.OrderEntity;
 import com.gcu.model.OrderModel;
 
-//implement interface to access metods
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+//implement interface to access methods
 public class OrdersBusinessService implements OrdersBusinessServiceInterface 
 {
 	@Autowired
 	OrderDataService service;
+	Logger logger = LoggerFactory.getLogger(OrdersBusinessService.class);
 	public void test() {
 		System.out.println("Hello from the OrdersBusinessService");
 	}
@@ -21,6 +25,7 @@ public class OrdersBusinessService implements OrdersBusinessServiceInterface
 	@Override
 	public List<OrderModel> getOrders() 
 	{
+		logger.info("Entering OrdersBusinessService.getOrders()");
 		List<OrderEntity> ordersEntity = service.findAll();
 		
 		List<OrderModel> ordersDomain = new ArrayList<OrderModel>();
@@ -29,6 +34,7 @@ public class OrdersBusinessService implements OrdersBusinessServiceInterface
 			ordersDomain.add(new OrderModel(entity.getId(), entity.getOrderNo(), entity.getProductName(), entity.getPrice(), entity.getQuantity()));
 		}
 		
+		logger.info("Exiting OrdersBusinessService.getOrders()");
 		return ordersDomain;
 	}
 

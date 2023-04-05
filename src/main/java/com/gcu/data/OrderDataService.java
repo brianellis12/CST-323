@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.gcu.business.SecurityBusinessService;
 import com.gcu.data.entity.OrderEntity;
 import com.gcu.data.repository.OrdersRepository;
 
@@ -22,6 +25,7 @@ public class OrderDataService implements DataAccessInterface<OrderEntity>
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
 	
+	Logger logger = LoggerFactory.getLogger(SecurityBusinessService.class);
 	public OrderDataService(OrdersRepository ordersRepository, DataSource dataSource)
 	{
 		this.ordersRepository = ordersRepository;
@@ -31,6 +35,7 @@ public class OrderDataService implements DataAccessInterface<OrderEntity>
 
 	public List<OrderEntity> findAll() 
 	{
+		logger.info("Entering OrderDataService.findAll()");
 		List<OrderEntity> orders = new ArrayList<OrderEntity>();
 		
 		try {
@@ -41,43 +46,24 @@ public class OrderDataService implements DataAccessInterface<OrderEntity>
 		}
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			logger.error("Exception in OrderDataService.findAll(): " + e);
 		}
-		
+		logger.info("Exiting OrderDataService.findAll()");
 		return orders;
 	}
 
-	
-	public OrderEntity findById(int id) {
-		
-		return null;
-	}
-
-	
 	public boolean create(OrderEntity order) 
 	{
+		logger.info("Entering OrderDataService.create()");
 		String sql = "INSERT INTO order(order_no, product_name, price, quantity) VALUES(?,?,?,?)";
 		try {
 			jdbcTemplateObject.update(sql, order.getOrderNo(), order.getProductName(), order.getPrice(),
 					order.getQuantity());			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Exception in OrderDataService.create(): " + e);
 			return false;
 		}
-		return true;
-	}
-		
-	
-
-	
-	public boolean update(OrderEntity t) {
-		
-		return true;
-	}
-
-	
-	public boolean delete(OrderEntity t) {
-		
+		logger.info("Exiting OrderDataService.create()");
 		return true;
 	}
 
