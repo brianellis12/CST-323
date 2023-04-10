@@ -9,7 +9,10 @@ phases:
       - mvn install
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo Build completed
 artifacts:
   files:
     - target/*.jar
+    - scripts/*.sh
+    - appspec.yml
+  discard-paths: yes
